@@ -1,13 +1,9 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.geom.Rectangle2D;
 import java.io.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Random;
-
-
 
 public class GamePanel extends JPanel implements KeyListener, ActionListener{
     private int snake_length;
@@ -104,8 +100,9 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener{
                                                     "Rules: \n" +
                                                     "1. Snakes must not collide with each other\n" +
                                                     "2. Snakes must not touch the blue border\n" +
-                                                    "3. One point is added when a snake eats an apple\n" +
-                                                    "4. A player wins when he reaches 13 points", "HELP", JOptionPane.ERROR_MESSAGE);
+                                                    "3. Snakes must not touch itself\n" +
+                                                    "4. One point is added when a snake eats an apple\n" +
+                                                    "5. A player wins when he reaches 13 points", "HELP", JOptionPane.ERROR_MESSAGE);
                                         }
                                     }
         );
@@ -253,23 +250,38 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener{
             snake2.setDead(true);
             snake2.setStart(false);
         }
-
+        int temp1 = 0;
         for(ArrayList<Integer> tmp : list1){
             int tmp_X = tmp.get(0);
             int tmp_Y = tmp.get(1);
-            if (tmp_X == snake2_headX && tmp_Y == snake2_headY) {
+
+            if ((tmp_X == snake2_headX && tmp_Y == snake2_headY)) {
                 snake2.setDead(true);
                 snake2.setStart(false);
             }
-        }
 
-        for(ArrayList<Integer> tmp : list2){
-            int tmp_X = tmp.get(0);
-            int tmp_Y = tmp.get(1);
-            if (tmp_X == snake1_headX && tmp_Y == snake1_headY) {
+            if (tmp_X == snake1_headX && tmp_Y == snake1_headY && temp1!=0){
                 snake1.setDead(true);
                 snake1.setStart(false);
             }
+            temp1 ++;
+        }
+
+        int temp2 = 0;
+        for(ArrayList<Integer> tmp : list2){
+            int tmp_X = tmp.get(0);
+            int tmp_Y = tmp.get(1);
+
+            if ((tmp_X == snake1_headX && tmp_Y == snake1_headY)) {
+                snake1.setDead(true);
+                snake1.setStart(false);
+            }
+
+            if (tmp_X == snake2_headX && tmp_Y == snake2_headY && temp2!=0) {
+                snake2.setDead(true);
+                snake2.setStart(false);
+            }
+            temp2 ++;
         }
     }
 
